@@ -1,0 +1,35 @@
+{
+  "name": "json-honey",
+  "version": "0.1.5",
+  "description": "Yet another sweetest json prettifier",
+  "main": "./src/honey.js",
+  "scripts": {
+    "test": "mocha ./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gobwas/json-honey.git"
+  },
+  "keywords": [
+    "json",
+    "pretty",
+    "print",
+    "align",
+    "sort",
+    "stringify"
+  ],
+  "author": "Sergey Kamardin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gobwas/json-honey/issues"
+  },
+  "homepage": "https://github.com/gobwas/json-honey",
+  "dependencies": {
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "chance": "^0.7.0",
+    "mocha": "^2.0.1"
+  }
+}

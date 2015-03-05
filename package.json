@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha ./test"
   },
+  "bin" : {
+    "honey" : "./bin/honey"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/gobwas/json-honey.git"

@@ -75,11 +75,27 @@ Default: `true`
 
 Indicates to sort or not by type of value in the object - is it scalar (primitive) (`boolean`, `string`, `number`) or not.
 
+##### options.sortType
+Type: `boolean`
+Default: `false`
+
+Indicates to sort or not by type of value. Type catched by `Object.prototype.toString.call(value)`.
+
 ##### options.sortKey
 Type: `boolean`
 Default: `true`
 
 Indicates to sort or not by key.
+
+## CLI
+
+Honey supports cli usage. Run:
+
+```bash
+honey
+```
+
+to get usage output.
 
 ## Install
 

@@ -5,6 +5,10 @@ function scalarSorter(definition) {
 	return !definition.scalar;
 }
 
+function typeSorter(definition) {
+	return __.getObjectType(definition.value);
+}
+
 function parse(obj, runtime) {
 	runtime = _.defaults(runtime || {}, {
 		nullable: false,
@@ -99,6 +103,10 @@ function stringify(definitions, options, runtime) {
 			sorters.push(scalarSorter);
 		}
 
+		if (options.sortType) {
+			sorters.push(typeSorter);
+		}
+
 		if (options.sortKey) {
 			sorters.push("key")
 		}
@@ -163,7 +171,8 @@ module.exports = function (obj, options) {
 	options = _.defaults(options || {}, {
 		pad:        2,
 		sortScalar: true,
-		sortKey:    true
+		sortKey:    true,
+		sortType:   false
 	});
 
 	return stringify(parse(obj), options, { type: type });

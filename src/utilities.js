@@ -41,7 +41,7 @@ function sortBy(collection, sorters) {
 					}
 
 					if (_.isString(sorter)) {
-						return collection[sorter];
+						return value[sorter];
 					}
 				}),
 				index: index,

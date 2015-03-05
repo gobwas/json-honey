@@ -8,7 +8,7 @@ var honey  = require("../src/honey"),
 	assert = chai.assert;
 
 it("should return valid json", function() {
-	var obj, nested, sugar, stringParsedJSON;
+	var obj, nested, sugar, stringParsedJSON, options;
 
 	function fill(obj) {
 		var keys;
@@ -48,12 +48,14 @@ it("should return valid json", function() {
 	fill(arr);
 	arr.push(fill({}));
 
-	expect(honey.bind(null, obj)).to.not.throw(Error);
-	expect(JSON.parse.bind(JSON, honey(obj))).to.not.throw(Error);
+	options = { sortKey: false, sortScalar: false };
+
+	expect(honey.bind(null, obj, options)).to.not.throw(Error);
+	expect(JSON.parse.bind(JSON, honey(obj, options))).to.not.throw(Error);
 
 	stringParsedJSON = JSON.parse(JSON.stringify(obj));
 
-	expect(JSON.parse(honey(obj).replace(/\n/, ""))).to.deep.equal(stringParsedJSON);
+	expect(JSON.parse(honey(obj, options).replace(/\n/, ""))).to.deep.equal(stringParsedJSON);
 });
 
 it("should parse as expected", function() {
@@ -73,7 +75,7 @@ it("should parse as expected", function() {
 		"empty": {}
 	};
 
-	expect(honey(obj)).equal(fs.readFileSync(__dirname + "/expectation.txt").toString());
+	expect(honey(obj, { sortKey: false, sortScalar: false })).equal(fs.readFileSync(__dirname + "/expectation.txt").toString());
 });
 
 it("should sort by user fn", function() {
@@ -84,18 +86,81 @@ it("should sort by user fn", function() {
 		"z": 0
 	};
 
-	sorted = honey(obj, { sortBy: [function(def) {
-		return _.indexOf(["z", "a"], def.key);
-	}]});
+	sorted = honey(obj, {
+		sortBy: [function(def) {
+			return _.indexOf(["z", "a"], def.key);
+		}],
+		sortKey: false,
+		sortScalar: false
+	});
 
 	expect(sorted).equal(fs.readFileSync(__dirname + "/sorted.txt").toString());
 });
 
+it("should sort by key", function() {
+	var obj, sorted;
+
+	obj = {
+		"b": 1,
+		"a": 1
+	};
+
+	sorted = honey(obj, {
+		sortScalar: false,
+		sortKey:    true
+	});
+
+	expect(sorted).equal(fs.readFileSync(__dirname + "/key-sorted.txt").toString())
+});
+
+
+it("should sort by scalar", function() {
+	var obj, sorted;
+
+	obj = {
+		"b": 1,
+		"a": {},
+		"c": "hi"
+	};
+
+	sorted = honey(obj, {
+		sortScalar: true,
+		sortKey:    false
+	});
+
+	expect(sorted).equal(fs.readFileSync(__dirname + "/scalar-sorted.txt").toString())
+});
+
+it("should sort by type", function() {
+	var obj, sorted;
+
+	obj = {
+		"s": "s",
+		"b": 1,
+		"q": new Boolean(false),
+		"a": {},
+		"c": "hi",
+		"z": true
+	};
+
+	sorted = honey(obj, {
+		sortScalar: false,
+		sortKey:    false,
+		sortType:   true
+	});
+
+	expect(sorted).equal(fs.readFileSync(__dirname + "/type-sorted.txt").toString())
+});
+
 it("should output single lined braces for emtpy iterables", function() {
-	expect(honey({})).equal("{}");
-	expect(honey(new Object)).equal("{}");
-	expect(honey([])).equal("[]");
-	expect(honey(new Array)).equal("[]");
+	var options;
+
+	options = { sortKey: false, sortScalar: false };
+
+	expect(honey({}, options)).equal("{}");
+	expect(honey(new Object, options)).equal("{}");
+	expect(honey([], options)).equal("[]");
+	expect(honey(new Array, options)).equal("[]");
 });
 
 it("should pass object with properties from the spec to the sorter", function() {
@@ -133,6 +198,8 @@ it("should pass object with properties from the spec to the sorter", function() 
 					throw new Error("Unknown key passed to the sorter");
 				}
 			}
-		}
+		},
+		sortKey: false,
+		sortScalar: false
 	});
 });

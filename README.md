@@ -9,7 +9,8 @@
 
 ## Whatsup
 
-This is a simple tool, that convert your objects to JSON format, aligning the values and sorting the keys. 
+This is a simple tool, that convert your objects to JSON format, aligning the values and sorting the keys.
+`honey` can also be used in [CLI](#CLI).
 
 Example:
 
@@ -101,6 +102,14 @@ to get usage output.
 
 Of course, via npm.
 
+For usage inside js:
+
 ```bash
 npm install json-honey
+```
+
+For usage as CLI:
+
+```bash
+npm install -g json-honey
 ```

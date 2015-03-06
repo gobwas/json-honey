@@ -10,7 +10,7 @@
 ## Whatsup
 
 This is a simple tool, that convert your objects to JSON format, aligning the values and sorting the keys.
-`honey` can also be used in [CLI](#CLI).
+`honey` can also be used in [CLI](#cli).
 
 Example:
 

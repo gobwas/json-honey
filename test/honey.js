@@ -163,6 +163,19 @@ it("should output single lined braces for emtpy iterables", function() {
 	expect(honey(new Array, options)).equal("[]");
 });
 
+it("should use `toJSON` method if exists", function() {
+	var options, value;
+
+	value = chance.word();
+
+	expect(honey({ a: { toJSON: function() { return value }} }))
+	 	.equal(
+	 		"{\n" +
+	 		"  \"a\": \"" + value + "\"\n" +
+	 		"}"
+ 		);
+});
+
 it("should pass object with properties from the spec to the sorter", function() {
 	var obj;
 

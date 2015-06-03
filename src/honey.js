@@ -41,6 +41,10 @@ function parse(obj, options, runtime) {
 				definition.compiled = value;
 				definition.scalar   = true;
 			} else {
+				if (_.isFunction(value.toJSON)) {
+					value = value.toJSON.call(value);
+				}
+
 				switch (type = __.getObjectType(value)) {
 					case "Object":
 					case "Array": {

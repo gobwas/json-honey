@@ -203,3 +203,16 @@ it("should pass object with properties from the spec to the sorter", function() 
 		sortScalar: false
 	});
 });
+
+
+it("should parse circular references", function() {
+	var options, a, b;
+
+	a = {};
+	b = {};
+
+	a.b = b;
+	b.a = a;
+
+	expect(honey(a, { circular: true })).equal(fs.readFileSync(__dirname + "/circular.txt").toString())
+});

@@ -9,15 +9,16 @@ function typeSorter(definition) {
 	return __.getObjectType(definition.value);
 }
 
-function parse(obj, runtime) {
+function parse(obj, options, runtime) {
 	runtime = _.defaults(runtime || {}, {
 		nullable: false,
-		parents:  []
+		parents:  [],
+		cache:    [obj]
 	});
 
 	return _.chain(obj)
 		.reduce(function(definitions, value, key) {
-			var definition, scalar, type;
+			var definition, scalar, type, cache;
 
 			// If it is not jsonable value - replace it to null in Array,
 			// and omit in Object
@@ -43,8 +44,19 @@ function parse(obj, runtime) {
 				switch (type = __.getObjectType(value)) {
 					case "Object":
 					case "Array": {
-						definition.definitions = parse(value, { nullable: type == "Array", parents: runtime.parents.concat(key) });
-						definition.scalar      = false;
+						if (runtime.cache.indexOf(value) != -1) {
+							if (options.circular) {
+								definition.compiled = options.circularValue;
+								definition.scalar   = true;
+							} else {
+								throw new Error("Converting circular structure to JSON")
+							}
+						} else {
+							cache = runtime.cache.slice();
+							cache.push(value);
+							definition.definitions = parse(value, options, { nullable: type == "Array", parents: runtime.parents.concat(key), cache: cache });
+							definition.scalar      = false;							
+						}
 						break;
 					}
 
@@ -169,11 +181,17 @@ module.exports = function (obj, options) {
 	}
 
 	options = _.defaults(options || {}, {
-		pad:        2,
-		sortScalar: true,
-		sortKey:    true,
-		sortType:   false
+		pad:           2,
+		sortScalar:    true,
+		sortKey:       true,
+		sortType:      false,
+		circular:      false,
+		circularValue: "[Circular]"
 	});
 
-	return stringify(parse(obj), options, { type: type });
+	if (options.circular && !__.isScalar(options.circularValue)) {
+		throw new Error("Only scalar value is acceptable for circular replacement");
+	}
+
+	return stringify(parse(obj, options), options, { type: type });
 }

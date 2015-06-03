@@ -88,6 +88,18 @@ Default: `true`
 
 Indicates to sort or not by key.
 
+##### options.scalar
+Type: `boolean`
+Default: `false`
+
+Replace circular reference with `options.circularValue` or not. If `false`, error will thrown on found circular.
+
+##### options.circularValue
+Type: `string`, `boolean`, `number`, `null`
+Default: `[Circular]`
+
+Replacement value for circular references if `options.circular` set to `true`.
+
 ## CLI
 
 Honey supports cli usage. Run:

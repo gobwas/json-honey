@@ -42,7 +42,7 @@ function parse(obj, options, runtime) {
 				definition.scalar   = true;
 			} else {
 				if (_.isFunction(value.toJSON)) {
-					value = value.toJSON.call(value);
+					value = value.toJSON();
 				}
 
 				switch (type = __.getObjectType(value)) {
@@ -177,6 +177,10 @@ function stringify(definitions, options, runtime) {
 
 module.exports = function (obj, options) {
 	var type;
+
+	if (_.isFunction(obj.toJSON)) {
+		obj = obj.toJSON();
+	}
 
 	type = __.getObjectType(obj);
 

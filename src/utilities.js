@@ -49,7 +49,7 @@ function sortBy(collection, sorters) {
 			};
 		})
 		.sort(function(a, b) {
-			var aCriteria, bCriteria, index, len,
+			var aCriteria, bCriteria, index, length,
 				value, other;
 
 			aCriteria = a.criteria;
